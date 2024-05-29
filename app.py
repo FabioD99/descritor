@@ -77,5 +77,18 @@ def list_images_from_bucket():
         image_list.append(image_info)
 
     return image_list
+
+@app.route('/apagar_imagens', methods=['POST'])
+def delete_all_images():
+    if request.form.get('password') == DELETE_PASSWORD:
+        # Delete all images from the bucket
+        bucket = storage_client.bucket(BUCKET_NAME)
+        blobs = bucket.list_blobs()
+        for blob in blobs:
+            blob.delete()
+        return redirect(url_for('index', message='Todas as Imagens Apagadas com Sucesso'))
+    else:
+        return redirect(url_for('index', message='Password Incorreta.'))
+
 if __name__ == '__main__':
     app.run(debug=True)
