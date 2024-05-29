@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descritor de Imagens</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Carregar Imagem</h1>
+        <form method="post" action="/" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">Escolha uma Imagem</label>
+                <input type="file" class="form-control-file" id="file" name="file">
+            </div>
+            <button type="submit" class="btn btn-primary">Carregar Descrição</button>
+        </form>
+        {% if descriptions %}
+            <h2 class="mt-5">Descrições da Imagem</h2>
+            <ul>
+                {% for description in descriptions %}
+                    <li>{{ description }}</li>
+                {% endfor %}
+            </ul>
+            <img src="{{ image_url }}" class="img-fluid mt-3">
+        {% endif %}
+    </div>
+
+    <div class="container">
+        <a href="{{ url_for('list_images') }}" class="btn btn-primary mt-3">Ver Imagens Já Registradas no Bucket</a>
+     </div>
+    <div class="container mt-5">
+        <h4>Insira a Password Para Apagar as Imagens do Bucket</h4>
+        <form method="post" action="/apagar_imagens">
+             <div class="form-group mt-3">
+            <input type="password" name="password" class="form-control" placeholder="Enter password" style="max-width: 200px;">
+            </div>
+            <div class="form-group mt-3">
+            <button type="submit" class="btn btn-danger">Apagar Imagens do Bucket</button>
+            </div>
+       </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Function to show pop-up message after deletion
+        window.onload = function() {
+            // Check if the message exists in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('message');
+
+            // If message exists, show the pop-up
+            if (message) {
+                alert(message);
+            }
+        };
+    </script>
+</body>
+</html>
