@@ -33,6 +33,12 @@ def index():
 
     return render_template('index.html')
 
+@app.route('/lista_imagens')
+def list_images():
+    # List the current images in the bucket
+    image_list = list_images_from_bucket()
+    return render_template('lista_imagens.html', image_list=image_list)
+
 def process_image(file):
     # Process the image with Google Vision API
     content = file.read()
@@ -56,5 +62,20 @@ def process_image(file):
     return descriptions, image_url
 
 
+def list_images_from_bucket():
+    # List the current images in the bucket
+    bucket = storage_client.bucket(BUCKET_NAME)
+    blobs = bucket.list_blobs()
+
+    image_list = []
+    for blob in blobs:
+        image_info = {
+            'name': blob.name,
+            'description': blob.metadata.get('descriptions', 'No description available'),
+            'image_url': blob.public_url
+        }
+        image_list.append(image_info)
+
+    return image_list
 if __name__ == '__main__':
     app.run(debug=True)
